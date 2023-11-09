@@ -27,9 +27,9 @@ def getPegawai():
     rows = cur.fetchall()
     # result = [row[1] for row in rows]
     con.close()
-    ids, names, passwords = [], [], []
+    ids, names, passwords, aktif = [], [], [], []
     for item in rows:
-        id, name, password = item
+        id, name, password, _ = item
         ids.append(id)
         names.append(name)
         passwords.append(password)
@@ -46,6 +46,24 @@ def getPasswordByName(namaParam):
     con = sqlite3.connect(database = "parking-system/parking.db")
     cur = con.cursor()
     cur.execute("Select password from pegawai where nama_pegawai=?",(namaParam,))
+    rows = cur.fetchone()
+    password = rows[0]
+    con.close()
+    return password
+
+def getPasswordByID(idParam):
+    con = sqlite3.connect(database = "parking-system/parking.db")
+    cur = con.cursor()
+    cur.execute("Select password from pegawai where pegawai_id=?",(idParam,))
+    rows = cur.fetchone()
+    password = rows[0]
+    con.close()
+    return password
+
+def getAdminPassword():
+    con = sqlite3.connect(database = "parking-system/parking.db")
+    cur = con.cursor()
+    cur.execute("Select password from pegawai where pegawai_id=0")
     rows = cur.fetchone()
     password = rows[0]
     con.close()
