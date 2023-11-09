@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import Image, ImageTk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from tkinter.simpledialog import askstring
 import tkinter as tk
 import sqlite3
@@ -35,13 +35,13 @@ class ParkingCheckinClass:
         txt_pegawai.current(0)
         txt_parkid = Entry(self.root, textvariable=self.var_parking_id,font=("goudy old style", 12), bg='light yellow')
         txt_parkid.place(x=330, y=150, width=180)
-        txt_parkid.insert(0, getHighestIdParking()+1) #Get newest park ID then plus 1
-        txt_plat = Entry(self.root, textvariable=self.var_plat,font=("goudy old style", 12), bg='light yellow').place(x=330, y=200, width=180)
-        # txt_waktu = Entry(self.root, textvariable=self.var_waktu,font=("goudy old style", 12), bg='light yellow').place(x=850, y=150, width=180)
+        txt_parkid.insert(0, getHighestIdParking()+1) 
+        txt_plat = Entry(self.root, textvariable=self.var_plat,font=("goudy old style", 12), bg='light yellow').place(x=330, y=200, width=120)
 
         #SECTION - BUTTONS
+        btn_upload = Button(self.root, text="Up",command=self.upload_image, font=("goudy old style", 12), bg='green', fg='white', cursor='hand2').place(x=460, y=200, width=50, height=25)
         btn_add = Button(self.root, text="Check In",command=self.get_password, font=("goudy old style", 15), bg='blue', fg='white', cursor='hand2').place(x=200, y=250, width=310, height=30)
-        # btn_add.pack()
+
 
         #ANCHOR - EMPLOYEE DETAILS / RESULT
         park_frame = Frame(self.root, bd=3, relief=RIDGE)
@@ -50,12 +50,7 @@ class ParkingCheckinClass:
         scrolly = Scrollbar(park_frame, orient=VERTICAL)
         scrollx = Scrollbar(park_frame, orient=HORIZONTAL)
 
-# Usage:
-# Sort the Treeview by column 1 (change it to the desired column index)
-
-        self.ParkingTable = ttk.Treeview(park_frame, columns=("parking_id", "plat", "waktu", "biaya", 'pegawai'), yscrollcommand=scrolly.set, xscrollcommand=scrollx.set)
-        # Sort the data by the 'column_name' column in descending order
-        # self.ParkingTable.sort(column='parking_id', order='desc')
+        self.ParkingTable = ttk.Treeview(park_frame, columns=("parking_id", "plat", "waktu", 'pegawai'), yscrollcommand=scrolly.set, xscrollcommand=scrollx.set)
 
         scrollx.pack(side=BOTTOM,fill=X)
         scrolly.pack(side=RIGHT,fill=Y)
@@ -65,7 +60,6 @@ class ParkingCheckinClass:
         self.ParkingTable.heading("parking_id", text="Parking ID")
         self.ParkingTable.heading("plat", text="Plat Nomor")
         self.ParkingTable.heading("waktu", text="Waktu")
-        self.ParkingTable.heading("biaya", text="Biaya")
         self.ParkingTable.heading("pegawai", text="Pegawai")
 
         self.ParkingTable["show"] = "headings"
@@ -73,7 +67,6 @@ class ParkingCheckinClass:
         self.ParkingTable.column("parking_id", width=90)
         self.ParkingTable.column("plat", width=100)
         self.ParkingTable.column("waktu", width=100)
-        self.ParkingTable.column("biaya", width=100)
         self.ParkingTable.column("pegawai", width=100)
 
         self.ParkingTable.pack(fill=BOTH, expand=1)
@@ -85,17 +78,16 @@ class ParkingCheckinClass:
         cur = con.cursor()
 
         now = datetime.now()
-        formatted_datetime = now.strftime('%Y-%m-%d %H:%M:%S.%f')
+        formatted_datetime = now.strftime('%Y-%m-%d %H:%M:%S')
         try:
             if self.var_plat.get() == "":
                 messagebox.showerror("Error", "Plat nomor must be required!", parent=root)
             else:
                 id_pegawai = getIdByName(namaParam)
-                cur.execute("Insert into parking (parking_id, plat, waktu, biaya, pegawai_id) values (?,?,?,?,?)",(
+                cur.execute("Insert into parking (parking_id, plat, waktu, biaya, pegawai_id, waktu_out, pegawai_id_out) values (?,?,?,0,?,0,0)",(
                     self.var_parking_id.get(),
                     self.var_plat.get(),
                     formatted_datetime,
-                    0,
                     id_pegawai,
                 ))
                 con.commit()
@@ -108,7 +100,7 @@ class ParkingCheckinClass:
         con = sqlite3.connect(database = "parking-system/parking.db")
         cur = con.cursor()
         try:
-            cur.execute('select * from parking order by parking_id desc')
+            cur.execute('select parking_id, plat, waktu, pegawai_id from parking order by waktu desc')
             rows = cur.fetchall()
             self.ParkingTable.delete(*self.ParkingTable.get_children())
             for row in rows:
@@ -126,6 +118,17 @@ class ParkingCheckinClass:
             self.add(inputPegawai)
         else:
             print("Password input canceled")
+            messagebox.showerror("Error", f"Password Salah")
+
+    def upload_image(self):
+        file_path = filedialog.askopenfilename(title="Select Image", filetypes=[("Image files", "*.png;*.jpg;*.jpeg;*.gif")])
+
+        if file_path:
+            print("Selected Image:", file_path)
+            plat = deteksi_plat(file_path)
+            print(plat)
+
+            self.var_plat.set(plat)
 
 if __name__== "__main__":
     root = Tk()
