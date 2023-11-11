@@ -15,15 +15,6 @@ class PegawaiClass:
         self.root.focus_force()
 
         #ANCHOR - ALL VARIABLES
-        self.var_parking_id = StringVar()
-        self.var_plat = StringVar()
-        self.var_pegawai = StringVar()
-        self.var_pegawai_out = StringVar()
-        self.var_waktu = StringVar()
-        self.var_waktu_out = StringVar()
-        self.var_nama_stnk = StringVar()
-        self.var_merek = StringVar()
-        self.var_biaya = IntVar()
         self.var_searchby = StringVar()
         self.var_searchtxt = StringVar()
 
@@ -93,61 +84,6 @@ class PegawaiClass:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
 
     #!SECTION FITUR
-    def add(self):
-        con = sqlite3.connect(database = "ims.db")
-        cur = con.cursor()
-        try:
-            if self.var_emp_id.get() == "":
-                messagebox.showerror("Error", "Employee ID must be required!", parent=root)
-            else:
-                cur.execute("Select * from employee where eid=?",(self.var_emp_id.get(),))
-                row=cur.fetchone()
-                if row != None:
-                    messagebox.showerror("Error", "This Employee ID already assigned, try different", parent=self.root)
-                else:
-                    cur.execute("Insert into employee (eid, name, email, gender, contact, dob, doj, pass, utype, address, salary) values (?,?,?,?,?,?,?,?,?,?,?)",(
-                        self.var_emp_id.get(),
-                        self.var_name.get(),
-                        self.var_email.get(),
-                        self.var_gender.get(),
-                        self.var_contact.get(),
-                        self.var_dob.get(),
-                        self.var_doj.get(),
-                        self.var_pass.get(),
-                        self.var_utype.get(),
-                        self.txt_address.get('1.0', END),
-                        self.var_salary.get()
-                    ))
-                    con.commit()
-                    messagebox.showinfo("Success", "Employee Addedd Successfully", parent=self.root)
-                    self.show()
-        except Exception as ex:
-            messagebox.showerror("Error", f"Error due to : {str(ex)}")
-    
-    def update(self):
-        con = sqlite3.connect(database = "parking-system/parking.db")
-        cur = con.cursor()
-        try:
-            if self.var_nama_stnk.get() == "" or self.var_merek.get() == "" or self.var_pegawai_out.get() == "":
-                messagebox.showerror("Error", "Masih ada kolom yang kosong!", parent=root)
-            else:
-                id_pegawai = getIdByName(self.var_pegawai_out.get())
-                biaya = getKalkulasiBiaya(self.var_parking_id.get(), self.var_waktu_out.get())
-                cur.execute("Update parking set biaya=?, waktu_out=?, pegawai_id_out=?, nama_stnk=?, merk=? where parking_id=?",(
-                    biaya,
-                    self.var_waktu_out.get(),
-                    id_pegawai,
-                    self.var_nama_stnk.get(),
-                    self.var_merek.get(),
-                    self.var_parking_id.get(),
-                    
-                ))
-                con.commit()
-                messagebox.showinfo("Success", "Checkout Successfully", parent=self.root)
-                self.show()
-        except Exception as ex:
-            messagebox.showerror("Error", f"Error due to : {str(ex)}")
-
     def get_password_delete(self, pegawai_id):
         password_inp = askstring("Password Prompt", "Hanya admin yang dapat menghapus\nEnter your password:", parent=self.root, show="*")
         if password_inp == getAdminPassword():
@@ -200,30 +136,8 @@ class PegawaiClass:
 
     def detail_pegawai(self, pegawai_id):
         self.new_win = Toplevel(self.root)
-        self.new_obj=TambahPegawaiClass(self.new_win, pegawai_id)
-        # detail_win = tk.Toplevel(self.root)
-        # detail_win.geometry("700x500+400+150")
-        # detail_win.title("Parking Management System | Detail Pegawai")
-        # detail_win.config(bg="white")
-        # detail_win.focus_force()
+        self.new_obj=DetailPegawaiClass(self.new_win, pegawai_id)
 
-
-        # # Connect to the database
-        # con = sqlite3.connect(database="parking-system/parking.db")
-        # cursor = con.cursor()
-
-        # # Fetch details from the database based on pegawai_id
-        # cursor.execute("SELECT * FROM pegawai WHERE pegawai_id=?", (pegawai_id,))
-        # employee_data = cursor.fetchone()
-
-        # # Close the database connection
-        # con.close()
-
-        # # Display details in the new win
-        # label_details = tk.Label(detail_win, text=f"Details for Pegawai ID: {employee_data[0]}\n"
-        #                                             f"Nama: {employee_data[1]}\n"
-        #                                             f"Aktif: {employee_data[2]}", font=("times new roman", 16))
-        # label_details.pack(pady=20)
 
     def on_pegawai_click(self, event, tree, open_func, delete_func):
     # Function to handle button clicks in the treeview
@@ -244,13 +158,11 @@ class PegawaiClass:
 
 
     def update_time(self):
-        # Your update logic goes here
         self.show()
-        # Call the function again after 1000 milliseconds (1 second)
         self.root.after(1000, self.update_time)
 
 
-class TambahPegawaiClass (PegawaiClass):
+class DetailPegawaiClass (PegawaiClass):
     def __init__(self, root, pegawai_id):
         # super().__init__(root)
         self.root = root
@@ -262,7 +174,6 @@ class TambahPegawaiClass (PegawaiClass):
 
         lbl_plat = Label(self.root, text=self.pegawai_id, font=("goudy old style", 12), bg="white").place(x=350, y=120)
         print(f'pegawai id nya nih {pegawai_id}')
-        # self.DetailTable = self.PegawaiTable
 
         title = Label(self.root, text="Checkout Parking", font=("goudy old style", 15), bg="#0f4d7d", fg="white").place(x=0, y=0, relwidth=1)
     
