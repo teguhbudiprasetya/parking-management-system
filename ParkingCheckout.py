@@ -124,7 +124,7 @@ class ParkingCheckoutClass:
         self.show()
 
     def show(self):
-        con = sqlite3.connect(database = "parking-system/parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
         try:
             cur.execute('select * from parking where biaya != 0 order by waktu_out desc')
@@ -189,7 +189,7 @@ class ParkingCheckoutClass:
             messagebox.showerror("Error", f"Error due to : {str(ex)}")
     
     def update(self):
-        con = sqlite3.connect(database = "parking-system/parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
         try:
             if self.var_nama_stnk.get() == "" or self.var_merek.get() == "" or self.var_pegawai_out.get() == "":
@@ -261,7 +261,7 @@ class ParkingCheckoutClass:
         self.show()
 
     def search(self):
-        con = sqlite3.connect(database = "parking-system/parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
         print(self.var_searchtxt.get())
         print(self.var_searchby.get())

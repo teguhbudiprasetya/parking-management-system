@@ -74,7 +74,7 @@ class ParkingCheckinClass:
     
     #!SECTION FITUR
     def add(self, namaParam):
-        con = sqlite3.connect(database = "parking-system/parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
 
         now = datetime.now()
@@ -97,7 +97,7 @@ class ParkingCheckinClass:
             messagebox.showerror("Error", f"Error due to : {str(ex)}")
     
     def show(self):
-        con = sqlite3.connect(database = "parking-system/parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
         try:
             cur.execute('select parking_id, plat, waktu, pegawai_id from parking order by waktu desc')

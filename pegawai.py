@@ -71,7 +71,7 @@ class PegawaiClass:
         self.root.after(1000, self.update_time())
 
     def show(self):
-        con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+        con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
         try:
             cur.execute('select * from pegawai')
@@ -94,7 +94,7 @@ class PegawaiClass:
             messagebox.showerror("Error", f"Password Salah")
 
     def delete(self, pegawai_id):
-        con = sqlite3.connect(database="D:\PBO\PROJECT\parking-management-system\parking.db")
+        con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
         try:
             op = messagebox.askyesno("Confirm", "Dou you really want to delete?", parent=self.root)
@@ -107,7 +107,7 @@ class PegawaiClass:
     
 
     def search(self):
-        con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+        con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
         print(self.var_searchtxt.get())
         print(self.var_searchby.get())

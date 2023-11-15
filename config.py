@@ -5,14 +5,14 @@ import easyocr
 from datetime import datetime
 
 def getParkirTerisi():
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select * from parking where biaya = 0")
     rows = cur.fetchall()
     con.close()
     return len(rows)
 def getParkirKeluar():
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     now = datetime.now().strftime('%Y-%m-%d')
     cur.execute("SELECT * FROM parking WHERE waktu_OUT LIKE '%"+now+"%'")
@@ -21,7 +21,7 @@ def getParkirKeluar():
     return len(rows)
 
 def getPegawai():
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select * from pegawai where pegawai_id != 0")
     rows = cur.fetchall()
@@ -43,7 +43,7 @@ def getPasswordPegawai():
     return password
 
 def getPasswordByName(namaParam):
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select password from pegawai where nama_pegawai=?",(namaParam,))
     rows = cur.fetchone()
@@ -52,7 +52,7 @@ def getPasswordByName(namaParam):
     return password
 
 def getPasswordByID(idParam):
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select password from pegawai where pegawai_id=?",(idParam,))
     rows = cur.fetchone()
@@ -61,7 +61,7 @@ def getPasswordByID(idParam):
     return password
 
 def getAdminPassword():
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select password from pegawai where pegawai_id=0")
     rows = cur.fetchone()
@@ -70,7 +70,7 @@ def getAdminPassword():
     return password
 
 def getIdByName(namaParam):
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select pegawai_id from pegawai where nama_pegawai=?",(namaParam,))
     rows = cur.fetchone()
@@ -79,7 +79,7 @@ def getIdByName(namaParam):
     return id
 
 def getHighestIdParking():
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select parking_id from parking order by parking_id desc")
     rows = cur.fetchone()
@@ -116,7 +116,7 @@ def deteksi_plat(img):
     return result_string
 
 def getKalkulasiBiaya(idParam, keluar):
-    con = sqlite3.connect(database = "D:\PBO\PROJECT\parking-management-system\parking.db")
+    con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     cur.execute("Select waktu from parking where parking_id=?",(idParam,))
     rows = cur.fetchone()
