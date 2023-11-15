@@ -77,7 +77,7 @@ class IMS:
         self.lbl_clock.config(text=f"Welcome to PMS\t\t Date: {date}\t\t Time: {time}")
         self.lbl_checkin.config(text=f"Total Parkir Terisi\n[ {getParkirTerisi()} ]")
         self.lbl_checkout.config(text=f"Total Parkir Terisi\n[ {getParkirKeluar()} ]")
-        self.lbl_barang_kehilangan.config(text=f"Total Parkir Terisi\n[ 0 ]")
+        self.lbl_barang_kehilangan.config(text=f"Total Parkir Terisi\n[  ]")
 
         # Schedule the update_time function to be called after 1000 milliseconds (1 second)
         self.root.after(1000, self.update_time)
