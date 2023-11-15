@@ -44,7 +44,7 @@ class IMS:
         self.lbl_checkout = Label(self.root, text=f'Total Parkir Keluar\n[ {getParkirKeluar()} ]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#ff5722", fg="white")
         self.lbl_checkout.place(x=650, y=120, height=150, width=300)
 
-        self.lbl_barang_kehilangan = Label(self.root, text="Barang kehilangan\n[ 0 ]",font=("times new roman", 20), bd=5, relief=RIDGE, bg="#009688", fg="white")
+        self.lbl_barang_kehilangan = Label(self.root, text="Barang kehilangan\n[ 1 ]",font=("times new roman", 20), bd=5, relief=RIDGE, bg="#009688", fg="white")
         self.lbl_barang_kehilangan.place(x=1000, y=120, height=150, width=300)
 
         self.lbl_product = Label(self.root, text="Total product\n[ 0 ]",font=("times new roman", 20), bd=5, relief=RIDGE, bg="#607d8b", fg="white")
