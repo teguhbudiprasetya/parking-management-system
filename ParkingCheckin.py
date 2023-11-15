@@ -21,7 +21,7 @@ class ParkingCheckinClass:
         self.var_pegawai = StringVar()
 
         #ANCHOR - TITLE
-        title = Label(self.root, text="Checkin Parking", font=("goudy old style", 15), bg="#0f4d7d", fg="white").place(x=0, y=0, relwidth=1)
+        title = Label(self.root, text="Checkin Parkin", font=("goudy old style", 15), bg="#0f4d7d", fg="white").place(x=0, y=0, relwidth=1)
 
         #ANCHOR - CONTENT
 
