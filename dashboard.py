@@ -2,6 +2,7 @@ from tkinter import *
 from ParkingCheckin import ParkingCheckinClass
 from ParkingCheckout import ParkingCheckoutClass
 from Pegawai import PegawaiClass
+from Kehilangan import KehilanganClass
 from config import *
 from datetime import datetime
 
@@ -31,7 +32,7 @@ class IMS:
         lbl_menu = Label(LeftMenu, text="Menu", font=("times new roman", 20), bg="#009688").pack(side=TOP, fill=X)
         btn_checkin = Button(LeftMenu, text="Check In",command=self.checkinParking, font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
         btn_checkout = Button(LeftMenu, text="Check Out",command=self.checkoutParking, font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
-        btn_kehilangan = Button(LeftMenu, text="Kehilangan", font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
+        btn_kehilangan = Button(LeftMenu, text="Kehilangan", command=self.Kehilangan, font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
         btn_riwayat = Button(LeftMenu, text="Riwayat", font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
         btn_pegawai = Button(LeftMenu, text="Pegawai",command=self.Pegawai ,font=("times new roman", 20, "bold"), bg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
         btn_exit = Button(LeftMenu, text="exit", command=self.root.destroy, font=("times new roman", 20, "bold"), bg="red", fg="white", bd=3, cursor="hand2").pack(side=TOP, fill=X)
@@ -66,6 +67,10 @@ class IMS:
     def Pegawai(self):
         self.new_win = Toplevel(self.root)
         self.new_obj=PegawaiClass(self.new_win)
+
+    def Kehilangan(self):
+        self.new_win = Toplevel(self.root)
+        self.new_obj=KehilanganClass(self.new_win)
 
     def update_time(self):
         # Get the current time
