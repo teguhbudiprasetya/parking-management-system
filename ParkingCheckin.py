@@ -5,6 +5,7 @@ from tkinter.simpledialog import askstring
 import tkinter as tk
 import sqlite3
 from config import *
+from deteksiplat import *
 from datetime import datetime
 
 class ParkingCheckinClass:
