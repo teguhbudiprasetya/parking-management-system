@@ -25,7 +25,7 @@ class PegawaiClass:
         searchFrame.place(x=50, y=40, width=600, height=60)
 
         # ANCHOR - OPTIONS
-        cmb_search = ttk.Combobox(searchFrame, textvariable=self.var_searchby, values=("Parking ID", "Plat Nomer"),
+        cmb_search = ttk.Combobox(searchFrame, textvariable=self.var_searchby, values=("Nama", "ID Pegawai"),
                                   state='readonly', justify=CENTER)
         cmb_search.place(x=10, y=10, width=180)
         cmb_search.current(0)
@@ -46,7 +46,7 @@ class PegawaiClass:
         scrolly = Scrollbar(park_frame, orient=VERTICAL)
         scrollx = Scrollbar(park_frame, orient=HORIZONTAL)
 
-        self.PegawaiTable = ttk.Treeview(park_frame, columns=("Pegawai ID", "Nama", "Aktif", "Lihat", "Hapus", "Edit"),
+        self.PegawaiTable = ttk.Treeview(park_frame, columns=("Pegawai ID", "Nama", "Aktif", "Hapus", "Edit"),
                                          show="headings", yscrollcommand=scrolly.set, xscrollcommand=scrollx.set)
 
         scrollx.pack(side=BOTTOM, fill=X)
@@ -57,16 +57,14 @@ class PegawaiClass:
         self.PegawaiTable.heading("Pegawai ID", text="Pegawai ID")
         self.PegawaiTable.heading("Nama", text="Nama Nomor")
         self.PegawaiTable.heading("Aktif", text="Aktif")
-        self.PegawaiTable.heading("Lihat", text="Lihat")
         self.PegawaiTable.heading("Hapus", text="Hapus")
         self.PegawaiTable.heading("Edit", text="Edit")
 
         self.PegawaiTable.column("Pegawai ID", width=10)
-        self.PegawaiTable.column("Nama", width=70)
-        self.PegawaiTable.column("Aktif", width=110)
-        self.PegawaiTable.column("Lihat", width=110)
-        self.PegawaiTable.column("Hapus", width=80)
-        self.PegawaiTable.column("Edit", width=80)
+        self.PegawaiTable.column("Nama", width=300)
+        self.PegawaiTable.column("Aktif", width=10)
+        self.PegawaiTable.column("Hapus", width=10)
+        self.PegawaiTable.column("Edit", width=10)
 
         self.PegawaiTable.pack(fill=BOTH, expand=1)
         self.PegawaiTable.bind("<ButtonRelease-1>", lambda event: self.on_pegawai_click(event))
@@ -76,9 +74,12 @@ class PegawaiClass:
                             cursor='hand2')
         btn_tambah.place(x=180, y=110, width=130, height=30, anchor="ne")
 
+        # Button to resfresh the page
+        btn_refresh = Button(self.root, command=self.show, text="Refresh", bg='#4caf50', fg='white', cursor='hand2')
+        btn_refresh.place(x=560, y=110, width=100, height=25)
+
         self.show()
 
-        self.root.after(1000, self.update_time)
 
     def show(self):
         con = sqlite3.connect(database="parking.db")
@@ -89,7 +90,7 @@ class PegawaiClass:
             self.PegawaiTable.delete(*self.PegawaiTable.get_children())
             for employee_data in rows:
                 pegawai_id, nama, _, aktif = employee_data
-                self.PegawaiTable.insert("", "end", values=(pegawai_id, nama, aktif, "Lihat", "Delete", "Edit"))
+                self.PegawaiTable.insert("", "end", values=(pegawai_id, nama, aktif, "Delete", "Edit"))
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
 
@@ -124,24 +125,25 @@ class PegawaiClass:
     def search(self):
         con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
-        print(self.var_searchtxt.get())
-        print(self.var_searchby.get())
+        
         try:
             if self.var_searchtxt.get() == "":
                 messagebox.showerror("Error", "Search input should be required", parent=self.root)
 
             else:
-                if self.var_searchby.get() == "Parking ID":
-                    self.var_searchby.set("parking_id")
-                elif self.var_searchby.get() == "Plat Nomer":
-                    self.var_searchby.set("plat")
-
+                if self.var_searchby.get() == "Nama":
+                    self.var_searchby.set("nama_pegawai")
+                elif self.var_searchby.get() == "ID Pegawai":
+                    self.var_searchby.set("pegawai_id")
+                print(self.var_searchtxt.get())
+                print(self.var_searchby.get())
                 cur.execute(
-                    "select * from pegawai where " + self.var_searchby.get() + " LIKE '%" + self.var_searchtxt.get() + "%'")
+                    "select * from pegawai where " + self.var_searchby.get()+ " LIKE '%"+self.var_searchtxt.get()+"%'")
                 rows = cur.fetchall()
                 if len(rows) != 0:
+                    print(rows)
                     self.PegawaiTable.delete(*self.PegawaiTable.get_children())
-                    rows = [(t[0], t[1], t[2], t[5], t[3], t[4], t[6]) for t in rows]
+                    rows = [(t[0], t[1], t[3], "Delete", "Edit") for t in rows]
                     for row in rows:
                         self.PegawaiTable.insert('', END, values=row)
                 else:
@@ -150,9 +152,6 @@ class PegawaiClass:
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
 
-    def detail_pegawai(self, pegawai_id):
-        self.new_win = Toplevel(self.root)
-        self.new_obj = DetailPegawaiClass(self.new_win, pegawai_id, self.show)
 
     def tambah_pegawai(self):
         self.new_win_tambah = Toplevel(self.root)
@@ -177,40 +176,6 @@ class PegawaiClass:
                 pegawai_id = item["values"][0]
                 print(f'Edit : {pegawai_id}')
                 self.edit_pegawai(pegawai_id)
-
-    def update_time(self):
-        self.show()
-        self.root.after(1000, self.update_time)
-
-
-class DetailPegawaiClass(PegawaiClass):
-    def __init__(self, root, pegawai_id, refresh_func):
-        self.root = root
-        self.root.geometry("700x500+400+150")
-        self.root.title("Parking Management System | Tambah Pegawai")
-        self.root.config(bg="white")
-        self.root.focus_force()
-        self.pegawai_id = pegawai_id
-
-        lbl_plat = Label(self.root, text=self.pegawai_id, font=("goudy old style", 12), bg="white").place(x=350, y=120)
-        print(f'pegawai id nya nih {pegawai_id}')
-
-        title = Label(self.root, text="Checkout Parking", font=("goudy old style", 15), bg="#0f4d7d", fg="white").place(
-            x=0, y=0, relwidth=1)
-
-        # Tombol Edit Pegawai
-        btn_edit = Button(self.root, command=lambda: self.edit_pegawai(pegawai_id), text="Edit Pegawai", bg='#ff9800',
-                          fg='white', cursor='hand2')
-        btn_edit.place(x=350, y=250, width=130, height=25)
-
-        # Tombol Hapus Pegawai
-        btn_hapus = Button(self.root, command=lambda: self.get_password_delete(pegawai_id), text="Hapus Pegawai",
-                           bg='#f44336', fg='white', cursor='hand2')
-        btn_hapus.place(x=500, y=250, width=130, height=25)
-
-    def edit_pegawai(self, pegawai_id):
-        # Perbaikan: implementasikan fungsi untuk mengedit pegawai di sini
-        print(f'Edit Pegawai : {pegawai_id}')
 
 class EditPegawaiClass:
     def __init__(self, root, pegawai_id, refresh_func):
@@ -241,6 +206,8 @@ class EditPegawaiClass:
         # Button to Update
         btn_simpan = Button(self.root, command=self.update_pegawai, text="Update", bg='#4caf50', fg='white', cursor='hand2')
         btn_simpan.place(x=150, y=200, width=100, height=25)
+
+        
 
     def fetch_data(self):
         try:
