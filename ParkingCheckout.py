@@ -157,37 +157,6 @@ class ParkingCheckoutClass:
             messagebox.showerror("Error", "Telah melakukan checkout!", parent=self.root)
 
     #!SECTION FITUR
-    def add(self):
-        con = sqlite3.connect(database = "ims.db")
-        cur = con.cursor()
-        try:
-            if self.var_emp_id.get() == "":
-                messagebox.showerror("Error", "Employee ID must be required!", parent=root)
-            else:
-                cur.execute("Select * from employee where eid=?",(self.var_emp_id.get(),))
-                row=cur.fetchone()
-                if row != None:
-                    messagebox.showerror("Error", "This Employee ID already assigned, try different", parent=self.root)
-                else:
-                    cur.execute("Insert into employee (eid, name, email, gender, contact, dob, doj, pass, utype, address, salary) values (?,?,?,?,?,?,?,?,?,?,?)",(
-                        self.var_emp_id.get(),
-                        self.var_name.get(),
-                        self.var_email.get(),
-                        self.var_gender.get(),
-                        self.var_contact.get(),
-                        self.var_dob.get(),
-                        self.var_doj.get(),
-                        self.var_pass.get(),
-                        self.var_utype.get(),
-                        self.txt_address.get('1.0', END),
-                        self.var_salary.get()
-                    ))
-                    con.commit()
-                    messagebox.showinfo("Success", "Employee Addedd Successfully", parent=self.root)
-                    self.show()
-        except Exception as ex:
-            messagebox.showerror("Error", f"Error due to : {str(ex)}")
-    
     def update(self):
         con = sqlite3.connect(database = "parking.db")
         cur = con.cursor()
@@ -222,43 +191,6 @@ class ParkingCheckoutClass:
         else:
             print("Password input canceled")
             messagebox.showerror("Error", f"Password Salah")
-
-    def delete(self):
-        con = sqlite3.connect(database = "ims.db")
-        cur = con.cursor()
-        try:
-            if self.var_emp_id.get() == "":
-                messagebox.showerror("Error", "Employee ID must be required!", parent=root)
-            else:
-                cur.execute("Select * from employee where eid=?",(self.var_emp_id.get(),))
-                row=cur.fetchone()
-                if row == None:
-                    messagebox.showerror("Error", "This Employee ID is not registered!", parent=self.root)
-                else:
-                    op = messagebox.askyesno("Confirm", "Dou you really want to delete?", parent=self.root)
-                    if op == True:
-                        cur.execute('delete from employee where eid=?',(self.var_emp_id.get(),))
-                        con.commit()
-                        messagebox.showinfo("Delete", "Employee Deleted Successfully", parent=self.root)
-                        self.show()
-        except Exception as ex:
-            messagebox.showerror("Error", f"Error due to : {str(ex)}")
-    
-    def clear(self):
-        self.var_parking_id.set(""),
-        self.var_email.set(""),
-        self.var_gender.set("Male"),
-        self.var_contact.set(""),
-        self.var_dob.set(""),
-        self.var_doj.set(""),
-        self.var_pass.set(""),
-        self.var_utype.set("Admin"),
-        self.txt_address.delete(""'1.0', END),
-        self.var_salary.set(""),
-        self.var_emp_id.set("")
-        self.var_searchby.set("Select")
-        self.var_searchtxt.set("")
-        self.show()
 
     def search(self):
         con = sqlite3.connect(database = "parking.db")
