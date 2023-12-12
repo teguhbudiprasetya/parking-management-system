@@ -1,7 +1,9 @@
 from tkinter import *
 from tkinter import ttk, messagebox
+from tkinter.simpledialog import askstring
 import sqlite3
 from datetime import datetime
+from config import *
 
 class KehilanganClass:
     def __init__(self, root):
@@ -18,30 +20,35 @@ class KehilanganClass:
         self.var_waktu = StringVar()
         self.var_nama_barang = StringVar()
         self.var_ciri_barang = StringVar()
+        self.var_pegawai = StringVar()
 
         # TITLE
         title = Label(self.root, text="DashBoard Kehilangan", font=("goudy old style", 15), bg="#0f4d7d", fg="white").place(x=0, y=0, relwidth=1)
 
         # CONTENT
-        # ROW 1
-        lbl_nama = Label(self.root, text="Nama", font=("goudy old style", 12), bg="white").place(x=50, y=120)
-        lbl_kontak = Label(self.root, text="Kontak", font=("goudy old style", 12), bg="white").place(x=350, y=120)
+        # COLUMN 1
+        lbl_nama = Label(self.root, text="Nama", font=("goudy old style", 12), bg="white").place(x=120, y=60)
+        txt_nama = Entry(self.root, textvariable=self.var_nama, font=("goudy old style", 12), bg='light yellow').place(x=180, y=60, width=180)
+        lbl_barang = Label(self.root, text="Barang", font=("goudy old style", 12), bg="white").place(x=120, y=100)
+        txt_barang = Entry(self.root, textvariable=self.var_nama_barang, font=("goudy old style", 12), bg='light yellow').place(x=180, y=100, width=180)
 
-        txt_nama = Entry(self.root, textvariable=self.var_nama, font=("goudy old style", 12), bg='light yellow').place(x=150, y=120, width=180)
-        txt_kontak = Entry(self.root, textvariable=self.var_kontak, font=("goudy old style", 12), bg='light yellow').place(x=450, y=120, width=180)
 
-        # ROW 2
-        lbl_nama_barang = Label(self.root, text="Nama Barang", font=("goudy old style", 12), bg="white").place(x=50, y=160)
-        lbl_ciri_barang = Label(self.root, text="Ciri Barang", font=("goudy old style", 12), bg="white").place(x=350, y=160)
-
-        txt_nama_barang = Entry(self.root, textvariable=self.var_nama_barang, font=("goudy old style", 12), bg='light yellow').place(x=150, y=160, width=180)
-        txt_ciri_barang = Entry(self.root, textvariable=self.var_ciri_barang, font=("goudy old style", 12), bg='light yellow').place(x=450, y=160, width=180)
+        # COLUMN 2
+        lbl_kontak = Label(self.root, text="Kontak", font=("goudy old style", 12), bg="white").place(x=380, y=60)
+        txt_kontak = Entry(self.root, textvariable=self.var_kontak, font=("goudy old style", 12), bg='light yellow').place(x=490, y=60, width=180)
+        lbl_pegawai = Label(self.root, text="Pegawai", font=("goudy old style", 12), bg="light yellow").place(x=380, y=100)
+        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai,values=getNamaPegawai(), state='readonly', justify=CENTER)
+        txt_pegawai.place(x=490, y=100, width=180, height=25)
+        txt_pegawai.current(0)
+        
+        lbl_ciri = Label(self.root, text="Ciri-ciri", font=("goudy old style", 12), bg="white").place(x=120, y=140)
+        txt_ciri = Text(root, relief="solid", bg='light yellow', width=61, height=3).place(x=180, y=140)
 
         separator = ttk.Separator(root, orient='horizontal')
         separator.place(x=0, y=200, relwidth=1)
 
         # BUTTONS
-        btn_add = Button(self.root, text="Simpan", font=("goudy old style", 15), bg='blue', fg='white', cursor='hand2', command=self.add).place(x=200, y=230, width=150, height=30)
+        btn_add = Button(self.root, text="Simpan", font=("goudy old style", 15), bg='blue', fg='white', cursor='hand2', command=self.get_password).place(x=200, y=230, width=150, height=30)
         btn_view_details = Button(self.root, text="Lihat Detail", font=("goudy old style", 15), bg='green', fg='white', cursor='hand2', command=self.view_details).place(x=370, y=230, width=150, height=30)
         btn_update_status = Button(self.root, text="Update Status", font=("goudy old style", 15), bg='orange', fg='white', cursor='hand2', command=self.update_status).place(x=200, y=270, width=320, height=30)
 
@@ -80,7 +87,18 @@ class KehilanganClass:
         self.KehilanganTable.pack(fill=BOTH, expand=1)
         self.show()
 
-    def add(self):
+    def get_password(self):
+        password_inp = askstring("Password Prompt", "Enter your password:", parent=self.root, show="*")
+        inputPegawai = self.var_pegawai.get()
+        pass_db = getPasswordByName(inputPegawai)
+        if password_inp == pass_db:
+            print("Entered Correct:", password_inp)
+            self.add(inputPegawai)
+        else:
+            print("Password input canceled")
+            messagebox.showerror("Error", f"Password Salah")
+
+    def add(self, namaParam):
         con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
 
@@ -91,18 +109,20 @@ class KehilanganClass:
             if not self.var_nama_barang.get():
                 messagebox.showerror("Error", "Nama Barang must be required!", parent=self.root)
             else:
-                cur.execute("INSERT INTO kehilangan (nama, kontak, waktu, nama_barang, ciri_barang, status) VALUES (?,?,?,?,?,?)", (
+                id_pegawai = getIdByName(namaParam)
+                cur.execute("INSERT INTO kehilangan (nama, kontak, waktu, nama_barang, ciri_barang, status, pegawai_id) VALUES (?,?,?,?,?,?,?)", (
                     self.var_nama.get(),
                     self.var_kontak.get(),
                     formatted_datetime,
                     self.var_nama_barang.get(),
                     self.var_ciri_barang.get(),
-                    "Hilang",  # Default status is set to "Hilang" when adding a new item
+                    "Hilang",  
+                    id_pegawai
                 ))
                 con.commit()
                 messagebox.showinfo("Success", "Barang Hilang Added Successfully", parent=self.root)
                 self.show()
-                self.clear_fields()  # Call the method to clear fields after successful addition
+                self.clear_fields() 
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to: {str(ex)}")
         finally:
@@ -140,7 +160,7 @@ class KehilanganClass:
             messagebox.showinfo("Information", "Please select a row to view details.")
             return
 
-        selected_id = self.KehilanganTable.item(selected_item, 'values')[0]  # Assuming the ID is the first column
+        selected_id = self.KehilanganTable.item(selected_item, 'values')[0] 
         con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
 
@@ -173,7 +193,7 @@ class KehilanganClass:
             messagebox.showinfo("Information", "Please select a row to update status.")
             return
 
-        selected_id = self.KehilanganTable.item(selected_item, 'values')[0]  # Assuming the ID is the first column
+        selected_id = self.KehilanganTable.item(selected_item, 'values')[0]
         new_status = messagebox.askquestion("Update Status", "Have you found the lost item?")
 
         if new_status == "yes":
@@ -185,10 +205,12 @@ class KehilanganClass:
         cur = con.cursor()
 
         try:
-            cur.execute('UPDATE kehilangan SET status=? WHERE id_hilang=?', (new_status, selected_id))
-            con.commit()
-            messagebox.showinfo("Success", "Status Updated Successfully", parent=self.root)
-            self.show()  # Refresh the displayed data after updating the status
+            if new_status == 'Ditemukan':
+                cur.execute('UPDATE kehilangan SET status=? WHERE id_hilang=?', (new_status, selected_id))
+                con.commit()
+            else:
+                messagebox.showinfo("Success", "Status Updated Successfully", parent=self.root)    
+            self.show()
         except Exception as ex:
             messagebox.showerror("Error", f"Error updating status due to: {str(ex)}", parent=self.root)
         finally:
