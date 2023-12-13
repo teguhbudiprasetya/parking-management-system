@@ -3,9 +3,8 @@ from tkinter import ttk, messagebox
 from tkinter.simpledialog import askstring
 import sqlite3
 
-# Fungsi getAdminPassword
+
 def getAdminPassword():
-    # Gantilah dengan implementasi yang sesuai
     return "admin"
 
 class PegawaiClass:
@@ -69,12 +68,10 @@ class PegawaiClass:
         self.PegawaiTable.pack(fill=BOTH, expand=1)
         self.PegawaiTable.bind("<ButtonRelease-1>", lambda event: self.on_pegawai_click(event))
 
-        # Tombol Tambah Pegawai
         btn_tambah = Button(self.root, command=self.tambah_pegawai, text="Tambah Pegawai", bg='#2196f3', fg='white',
                             cursor='hand2')
         btn_tambah.place(x=180, y=110, width=130, height=30, anchor="ne")
 
-        # Button to resfresh the page
         btn_refresh = Button(self.root, command=self.show, text="Refresh", bg='#4caf50', fg='white', cursor='hand2')
         btn_refresh.place(x=560, y=110, width=100, height=25)
 

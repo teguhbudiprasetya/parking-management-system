@@ -7,7 +7,7 @@ from Riwayat import RiwayatClass
 from config import *
 from datetime import datetime
 
-class IMS:
+class IMS(ConfigClass):
     def __init__(self, root):
         self.root=root
         self.root.geometry("1350x700+0+0")
@@ -38,16 +38,16 @@ class IMS:
 
         #ANCHOR - CONTENT
 
-        self.lbl_checkin = Label(self.root, text=f"Total Parkir Terisi\n[ {getParkirTerisi()} ]",font=("times new roman", 20), bd=5, relief=RIDGE, bg="#33bbf9", fg="white")
+        self.lbl_checkin = Label(self.root, text=f"Total Parkir Terisi\n[ {self.getParkirTerisi()} ]",font=("times new roman", 20), bd=5, relief=RIDGE, bg="#33bbf9", fg="white")
         self.lbl_checkin.place(x=300, y=120, height=150, width=300)
 
-        self.lbl_checkout = Label(self.root, text=f'Parkir Keluar Hari ini\n[ {getParkirKeluar()} ]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#ff5722", fg="white")
+        self.lbl_checkout = Label(self.root, text=f'Parkir Keluar Hari ini\n[ {self.getParkirKeluar()} ]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#ff5722", fg="white")
         self.lbl_checkout.place(x=650, y=120, height=150, width=300)
 
-        self.lbl_barang_kehilangan = Label(self.root, text=f'Barang kehilangan\n[{getParkirTerisiNow()}]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#009688", fg="white")
+        self.lbl_barang_kehilangan = Label(self.root, text=f'Barang kehilangan\n[{self.getParkirTerisiNow()}]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#009688", fg="white")
         self.lbl_barang_kehilangan.place(x=1000, y=120, height=150, width=300)
 
-        self.lbl_inToday = Label(self.root, text=f'Parkir Masuk Hari Ini\n[{getBarangHilang()}]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#607d8b", fg="white")
+        self.lbl_inToday = Label(self.root, text=f'Parkir Masuk Hari Ini\n[{self.getBarangHilang()}]',font=("times new roman", 20), bd=5, relief=RIDGE, bg="#607d8b", fg="white")
         self.lbl_inToday.place(x=300, y=300, height=150, width=300)
 
         self.update_time()
@@ -78,10 +78,10 @@ class IMS:
         time = now.strftime('%H:%M:%S')
 
         self.lbl_clock.config(text=f"Welcome to PMS\t\t Date: {date}\t\t Time: {time}")
-        self.lbl_checkin.config(text=f"Parkir Terisi\n[ {getParkirTerisi()} ]")
-        self.lbl_checkout.config(text=f"Parkir Keluar Hari Ini\n[ {getParkirKeluar()} ]")
-        self.lbl_barang_kehilangan.config(text=f"Barang Kehilangan\n[ {getBarangHilang()} ]")
-        self.lbl_inToday.config(text=f"Parkir Masuk Hari Ini\n[ {getParkirTerisiNow()} ]")
+        self.lbl_checkin.config(text=f"Parkir Terisi\n[ {self.getParkirTerisi()} ]")
+        self.lbl_checkout.config(text=f"Parkir Keluar Hari Ini\n[ {self.getParkirKeluar()} ]")
+        self.lbl_barang_kehilangan.config(text=f"Barang Kehilangan\n[ {self.getBarangHilang()} ]")
+        self.lbl_inToday.config(text=f"Parkir Masuk Hari Ini\n[ {self.getParkirTerisiNow()} ]")
 
         self.root.after(1000, self.update_time)
         
