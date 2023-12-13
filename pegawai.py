@@ -4,14 +4,13 @@ from tkinter.simpledialog import askstring
 import sqlite3
 from config import *
 
-
 def getAdminPassword():
     return "admin"
 
 class PegawaiClass(ConfigClass):
     def __init__(self):
         self.root = Tk()
-
+        
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")
