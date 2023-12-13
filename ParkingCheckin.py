@@ -31,7 +31,7 @@ class ParkingCheckinClass(ConfigClass):
         lbl_parkid = Label(self.root, text="Parking ID", font=("goudy old style", 12),bg="white").place(x=200, y=150)
         lbl_plat = Label(self.root, text="Plat Nomor", font=("goudy old style", 12), bg="white").place(x=200, y=200)
 
-        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai,values=getNamaPegawai(), state='readonly', justify=CENTER)
+        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai,values=self.getNamaPegawai(), state='readonly', justify=CENTER)
         txt_pegawai.place(x=330, y=100, width=180, height=25)
         txt_pegawai.current(0)
         txt_parkid = Entry(self.root, textvariable=self.var_parking_id,font=("goudy old style", 12), bg='light yellow')

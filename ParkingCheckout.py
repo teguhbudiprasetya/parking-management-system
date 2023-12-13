@@ -66,7 +66,7 @@ class ParkingCheckoutClass(ConfigClass):
 
         txt_nama_stnk = Entry(self.root, textvariable=self.var_nama_stnk,font=("goudy old style", 12),bg='light yellow').place(x=150, y=230, width=180)
         # txt_pegawai = Entry(self.root, textvariable=self.var_pegawai,font=("goudy old style", 12), bg='light yellow').place(x=450, y=230, width=180)
-        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai_out,values=getNamaPegawai(), state='readonly', justify=CENTER)
+        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai_out,values=self.getNamaPegawai(), state='readonly', justify=CENTER)
         txt_pegawai.place(x=450, y=230, width=180, height=25)
         txt_pegawai.current(0)
 
