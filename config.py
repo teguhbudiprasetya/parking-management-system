@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog
 import sqlite3
-# import easyocr
 from datetime import datetime
 
 def getParkirTerisi():
@@ -11,11 +10,28 @@ def getParkirTerisi():
     rows = cur.fetchall()
     con.close()
     return len(rows)
+def getParkirTerisiNow():
+    con = sqlite3.connect(database = "parking.db")
+    cur = con.cursor()
+    now = datetime.now().strftime('%Y-%m-%d')
+    cur.execute("Select * from parking where biaya = 0 and waktu LIKE '%"+now+"%'")
+    rows = cur.fetchall()
+    con.close()
+    # print(rows)
+    return len(rows)
 def getParkirKeluar():
     con = sqlite3.connect(database = "parking.db")
     cur = con.cursor()
     now = datetime.now().strftime('%Y-%m-%d')
     cur.execute("SELECT * FROM parking WHERE waktu_OUT LIKE '%"+now+"%'")
+    rows = cur.fetchall()
+    con.close()
+    return len(rows)
+def getBarangHilang():
+    con = sqlite3.connect(database = "parking.db")
+    cur = con.cursor()
+    now = datetime.now().strftime('%Y-%m-%d')
+    cur.execute("SELECT * FROM kehilangan WHERE status='Hilang'")
     rows = cur.fetchall()
     con.close()
     return len(rows)
@@ -94,7 +110,7 @@ def getKalkulasiBiaya(idParam, keluar):
     cur.execute("Select waktu from parking where parking_id=?",(idParam,))
     rows = cur.fetchone()
     masuk = rows[0]    
-    print(masuk)
+    # print(masuk)
     start_time = datetime.strptime(masuk, '%Y-%m-%d %H:%M:%S')
     end_time = datetime.strptime(keluar, '%Y-%m-%d %H:%M:%S')
 
