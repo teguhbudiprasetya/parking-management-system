@@ -3,7 +3,7 @@ from tkinter import ttk, messagebox
 import sqlite3
 from config import *
 
-class RiwayatClass:
+class RiwayatClass(ConfigClass):
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")

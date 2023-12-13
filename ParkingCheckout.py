@@ -6,7 +6,7 @@ import sqlite3
 from datetime import datetime
 from config import *
 
-class ParkingCheckoutClass:
+class ParkingCheckoutClass(ConfigClass):
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")
@@ -151,7 +151,7 @@ class ParkingCheckoutClass:
             formatted_datetime = now.strftime('%Y-%m-%d %H:%M:%S')
 
             self.var_waktu_out.set(formatted_datetime),
-            biaya = getKalkulasiBiaya(self.var_parking_id.get(), self.var_waktu_out.get())
+            biaya = self.getKalkulasiBiaya(self.var_parking_id.get(), self.var_waktu_out.get())
             self.var_biaya.set(biaya)
         else:
             messagebox.showerror("Error", "Telah melakukan checkout!", parent=self.root)
@@ -164,8 +164,8 @@ class ParkingCheckoutClass:
             if self.var_nama_stnk.get() == "" or self.var_merek.get() == "" or self.var_pegawai_out.get() == "":
                 messagebox.showerror("Error", "Masih ada kolom yang kosong!", parent=root)
             else:
-                id_pegawai = getIdByName(self.var_pegawai_out.get())
-                biaya = getKalkulasiBiaya(self.var_parking_id.get(), self.var_waktu_out.get())
+                id_pegawai = self.getIdByName(self.var_pegawai_out.get())
+                biaya = self.getKalkulasiBiaya(self.var_parking_id.get(), self.var_waktu_out.get())
                 cur.execute("Update parking set biaya=?, waktu_out=?, pegawai_id_out=?, nama_stnk=?, merk=? where parking_id=?",(
                     biaya,
                     self.var_waktu_out.get(),
@@ -184,7 +184,7 @@ class ParkingCheckoutClass:
     def get_password(self):
         password_inp = askstring("Password Prompt", "Enter your password:", parent=self.root, show="*")
         inputPegawai = self.var_pegawai_out.get()
-        pass_db = getPasswordByName(inputPegawai)
+        pass_db = self.getPasswordByName(inputPegawai)
         if password_inp == pass_db:
             print("Entered Correct:", password_inp)
             self.update()

@@ -5,7 +5,7 @@ import sqlite3
 from datetime import datetime
 from config import *
 
-class KehilanganClass:
+class KehilanganClass(ConfigClass):
     def __init__(self, root):
         self.root = root
         self.root.geometry("800x500+300+100")
@@ -37,7 +37,7 @@ class KehilanganClass:
         lbl_kontak = Label(self.root, text="Kontak", font=("goudy old style", 12), bg="white").place(x=380, y=60)
         txt_kontak = Entry(self.root, textvariable=self.var_kontak, font=("goudy old style", 12), bg='light yellow').place(x=490, y=60, width=180)
         lbl_pegawai = Label(self.root, text="Pegawai", font=("goudy old style", 12), bg="light yellow").place(x=380, y=100)
-        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai,values=getNamaPegawai(), state='readonly', justify=CENTER)
+        txt_pegawai=ttk.Combobox(self.root, textvariable=self.var_pegawai,values=self.getNamaPegawai(), state='readonly', justify=CENTER)
         txt_pegawai.place(x=490, y=100, width=180, height=25)
         txt_pegawai.current(0)
         
@@ -92,7 +92,7 @@ class KehilanganClass:
     def get_password(self):
         password_inp = askstring("Password Prompt", "Enter your password:", parent=self.root, show="*")
         inputPegawai = self.var_pegawai.get()
-        pass_db = getPasswordByName(inputPegawai)
+        pass_db = self.getPasswordByName(inputPegawai)
         if password_inp == pass_db:
             print("Entered Correct:", password_inp)
             self.add(inputPegawai)
@@ -111,7 +111,7 @@ class KehilanganClass:
             if not self.var_nama_barang.get():
                 messagebox.showerror("Error", "Nama Barang must be required!", parent=self.root)
             else:
-                id_pegawai = getIdByName(namaParam)
+                id_pegawai = self.getIdByName(namaParam)
                 cur.execute("INSERT INTO kehilangan (nama, kontak, waktu, nama_barang, ciri_barang, status, pegawai_id) VALUES (?,?,?,?,?,?,?)", (
                     self.var_nama.get(),
                     self.var_kontak.get(),

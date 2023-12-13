@@ -7,7 +7,7 @@ import sqlite3
 def getAdminPassword():
     return "admin"
 
-class PegawaiClass:
+class PegawaiClass(ConfigClass):
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")

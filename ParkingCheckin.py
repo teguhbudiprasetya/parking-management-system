@@ -8,7 +8,7 @@ from config import *
 from deteksiplat import *
 from datetime import datetime
 
-class ParkingCheckinClass:
+class ParkingCheckinClass(ConfigClass):
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")
@@ -36,7 +36,7 @@ class ParkingCheckinClass:
         txt_pegawai.current(0)
         txt_parkid = Entry(self.root, textvariable=self.var_parking_id,font=("goudy old style", 12), bg='light yellow')
         txt_parkid.place(x=330, y=150, width=180)
-        txt_parkid.insert(0, getHighestIdParking()+1) 
+        txt_parkid.insert(0, self.getHighestIdParking()+1) 
         txt_plat = Entry(self.root, textvariable=self.var_plat,font=("goudy old style", 12), bg='light yellow').place(x=330, y=200, width=120)
 
         #SECTION - BUTTONS
@@ -84,7 +84,7 @@ class ParkingCheckinClass:
             if self.var_plat.get() == "":
                 messagebox.showerror("Error", "Plat nomor must be required!", parent=root)
             else:
-                id_pegawai = getIdByName(namaParam)
+                id_pegawai = self.getIdByName(namaParam)
                 cur.execute("Insert into parking (parking_id, plat, waktu, biaya, pegawai_id, waktu_out, pegawai_id_out) values (?,?,?,0,?,0,0)",(
                     self.var_parking_id.get(),
                     self.var_plat.get(),
@@ -113,7 +113,7 @@ class ParkingCheckinClass:
     def get_password(self):
         password_inp = askstring("Password Prompt", "Enter your password:", parent=self.root, show="*")
         inputPegawai = self.var_pegawai.get()
-        pass_db = getPasswordByName(inputPegawai)
+        pass_db = self.getPasswordByName(inputPegawai)
         if password_inp == pass_db:
             print("Entered Correct:", password_inp)
             self.add(inputPegawai)
