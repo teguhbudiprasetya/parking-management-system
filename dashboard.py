@@ -8,6 +8,9 @@ from config import *
 from datetime import datetime
 
 class IMS(ConfigClass):
+    def __init__(self):
+        self.root = Tk()
+        
     def __init__(self, root):
         self.root=root
         self.root.geometry("1350x700+0+0")

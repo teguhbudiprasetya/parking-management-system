@@ -6,6 +6,9 @@ from datetime import datetime
 from config import *
 
 class KehilanganClass(ConfigClass):
+    def __init__(self):
+        self.root = Tk()
+        
     def __init__(self, root):
         self.root = root
         self.root.geometry("800x500+300+100")

@@ -7,6 +7,9 @@ from datetime import datetime
 from config import *
 
 class ParkingCheckoutClass(ConfigClass):
+    def __init__(self):
+        self.root = Tk()
+        
     def __init__(self, root):
         self.root = root
         self.root.geometry("700x500+400+150")
