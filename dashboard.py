@@ -73,19 +73,16 @@ class IMS:
         self.new_obj=RiwayatClass(self.new_win)
 
     def update_time(self):
-        # Get the current time
         now = datetime.now()
         date = now.strftime('%Y-%m-%d')
         time = now.strftime('%H:%M:%S')
 
-        # Update the label text
         self.lbl_clock.config(text=f"Welcome to PMS\t\t Date: {date}\t\t Time: {time}")
         self.lbl_checkin.config(text=f"Parkir Terisi\n[ {getParkirTerisi()} ]")
         self.lbl_checkout.config(text=f"Parkir Keluar Hari Ini\n[ {getParkirKeluar()} ]")
         self.lbl_barang_kehilangan.config(text=f"Barang Kehilangan\n[ {getBarangHilang()} ]")
         self.lbl_inToday.config(text=f"Parkir Masuk Hari Ini\n[ {getParkirTerisiNow()} ]")
 
-        # Schedule the update_time function to be called after 1000 milliseconds (1 second)
         self.root.after(1000, self.update_time)
         
 root=Tk()

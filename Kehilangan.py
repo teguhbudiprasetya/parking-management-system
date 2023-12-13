@@ -42,9 +42,11 @@ class KehilanganClass:
         txt_pegawai.current(0)
         
         lbl_ciri = Label(self.root, text="Ciri-ciri", font=("goudy old style", 12), bg="white").place(x=120, y=140)
-        txt_ciri = Text(root, relief="solid", bg='light yellow', width=61, height=3).place(x=180, y=140)
+        txt_ciri = Entry(self.root, textvariable=self.var_ciri_barang, relief="solid", bg='light yellow', width=81)
+        txt_ciri.place(x=180, y=140)
 
-        separator = ttk.Separator(root, orient='horizontal')
+
+        separator = ttk.Separator(self.root, orient='horizontal')
         separator.place(x=0, y=200, relwidth=1)
 
         # BUTTONS
@@ -139,14 +141,13 @@ class KehilanganClass:
         con = sqlite3.connect(database="parking.db")
         cur = con.cursor()
         try:
-            cur.execute('SELECT id_hilang, nama, kontak, waktu, nama_barang, ciri_barang, status FROM kehilangan')
+            cur.execute('SELECT * FROM kehilangan')
             rows = cur.fetchall()
 
-            # Clear previous data in the Treeview
             for item in self.KehilanganTable.get_children():
                 self.KehilanganTable.delete(item)
 
-            # Insert new data into the Treeview
+            print(rows)
             for row in rows:
                 self.KehilanganTable.insert('', END, values=row)
         except Exception as ex:

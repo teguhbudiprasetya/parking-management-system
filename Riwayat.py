@@ -53,7 +53,6 @@ class RiwayatClass:
             rows = cur.fetchall()
             self.ParkingTable.delete(*self.ParkingTable.get_children())
             for row in rows:
-                print(row)
                 self.ParkingTable.insert('', END, values=row)
         except Exception as ex:
             messagebox.showerror("Error", f"Error due to : {str(ex)}", parent=self.root)
